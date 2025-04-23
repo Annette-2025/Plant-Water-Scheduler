@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Create a HTML list using JavaScript</title>
+    <style>
+        #myList {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        li:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <h1>Plant List</h1>
+    </center>
+    <ul id="myList" onclick="blue(id, style.color)"></ul>
+    <button type="button" onclick="popup()">Add Another</button>
+    <br />
+    <button type="button" onclick="clearStorage()">Clear All</button>
+    <br />
+    <a href="calendar.html">View Calendar</a>
+    <script>
+        
+
+        //data = ["Ficus", "Lemon", "Snake Plant", "Burrow's Tail"];
+        let data = '{ "plants" : [' +
+'{ "name":"Ficus" , "year":"2025", "month":"1", "day":"1" },' +
+'{ "name":"Lemon" , "year":"2025", "month":"1", "day":"2" },' +
+'{ "name":"Snake Plant" , "year":"2025", "month":"1", "day":"3" } ]}';
+
+        //localStorage.setItem("plants", data); //this causes the list to reset to the default each time, otherwise it would continue to save
+        getData = localStorage.getItem("plants");
+
+        const obj = JSON.parse(getData);
+        let list = document.getElementById("myList");
+        for (i=0; i < obj.plants.length; ++i) {
+            let li = document.createElement('li');
+            let cat = obj.plants[i].name + ", " + obj.plants[i].month + "/" + obj.plants[i].day + "/" + obj.plants[i].year;
+            li.innerText = cat;
+            //li.innerText = document.getElementById("myList").innerHTML = obj.plants[i].name
+            //+ " " + obj.plants[i].year + ": " + i;
+            list.appendChild(li);
+        }
+        
+
+
+        
+        //for (i = 0; i < data.length; ++i) {
+            //let li = document.createElement('li');
+            //li.innerText = data[i];
+            //list.appendChild(li);
+        //}
+
+        function popup() {
+            //alert("hello world!");
+            name1 = window.prompt("Enter a plant name:", "type here");
+            if (name1 == null || name1 == ""){return;}
+            do {
+                year1 = window.prompt("Enter year:", "type here");
+                if (year1 == null || year1 == ""){return;}
+            } while(year1 != 2025);
+            do {
+                month1 = window.prompt("Enter month:", "type here");
+                if (month1 == null || month1 == ""){return;}
+            } while(month1 < 1 || month1 > 12);
+            do {
+                max = 31;
+                day1 = window.prompt("Enter day:", "type here");
+                if (day1 == null || day1 == ""){return;}
+                if (month1 == 2){max = 28;}
+                    else if (month1 == 4 || month1 == 6 || month1 == 9 || month1 == 11){max = 30;}
+                        else {max = 31;}
+                //if (month == 1 || month == 3 || month == 5 || month == 7 || month == )
+            } while(day1 < 1 || day1 > max);
+            
+            newObject = { name: name1, year: year1, month: month1, day: day1 };
+            obj.plants.push(newObject);
+            JSON_String = JSON.stringify(obj);
+            localStorage.setItem("plants", JSON_String);
+            cat1 = name1 + ", " + month1 + "/" + day1 + "/" + year1;
+            update(cat1);
+        }
+        function update(text) {
+            let li = document.createElement('li');
+            li.innerText = text
+            list.appendChild(li);
+        }
+        function clearStorage(){
+            //localStorage.clear("plants");
+        }
+        function blue(id, color){
+            if (color == "blue"){
+                document.getElementById(list[0]).style="color: black";
+            } else {
+                document.getElementById(list[0]).style="color: blue";
+            }
+            
+        }
+
+        function removeValue(target) {
+            if (target.tagName === 'LI') {
+                target.remove();
+            }
+        }
+
+        document.getElementById(    //this doesn't actually remove the value, it only looks like it has been removed.
+              'myList').addEventListener(
+              'click', function (event) {
+            removeValue(event.target);
+        });
+        /*
+        * BRIGHT IDEAS HERE:
+        * perhaps I should make the year, month, and day an object withing the plants object,
+        so that each plant can have an infinite ammount of dates
+        // TODO: cancel button does not work (get's stuck in loop)
+        * Links: https://www.w3schools.com/jsref/event_onclick.asp
+        * https://www.w3schools.com/jS/js_popup.asp
+        * https://www.geeksforgeeks.org/how-to-add-remove-value-onclick-event-in-html/
+        */
+    </script>
+</body>
+
+</html>

@@ -28,18 +28,25 @@
     </center>
     <ul id="myList" onclick="blue(id, style.color)"></ul>
     <button type="button" onclick="popup()">Add Another</button>
-    <br />
+    <br /><br />
     <button type="button" onclick="clearStorage()">Clear All</button>
-    <br />
+    <br /><br />
     <a href="calendar.html">View Calendar</a>
+    <br />
+    <p id="testScript"></p>
+    <br />
+    <p id="test2"></p>
     <script>
         
 
         //This is the default data for the list, it is stored in a json-like format
+        //let data = '{ "plants" : [' +
+//'{ "name":"Ficus" , "year":"2025", "month":"1", "day":"1" },' +
+//'{ "name":"Lemon" , "year":"2025", "month":"1", "day":"2" },' +
+//'{ "name":"Snake Plant" , "year":"2025", "month":"1", "day":"3" } ]}';
         let data = '{ "plants" : [' +
-'{ "name":"Ficus" , "year":"2025", "month":"1", "day":"1" },' +
-'{ "name":"Lemon" , "year":"2025", "month":"1", "day":"2" },' +
-'{ "name":"Snake Plant" , "year":"2025", "month":"1", "day":"3" } ]}';
+'{ "name":" " , "year":" ", "month":" ", "day":" " } ]}';
+        //localStorage.clear("plants");
 
         //This sets the default data into the local storage, you will not be able to add
         //more plants while this is uncommented, however you will have to uncomment it the first time you run
@@ -50,6 +57,15 @@
 
         //This retrieves data from local storage, it will stay on the server perminantly until deleted!
         getData = localStorage.getItem("plants");
+        //document.getElementById("testScript").innerHTML = "data: " + getData;
+        if(getData == null){
+            localStorage.setItem("plants", data);
+            getData = localStorage.getItem("plants");
+            //document.getElementById("testScript").innerHTML = "It worked";
+        }else{
+            document.getElementById("testScript").innerHTML = "For debugging: " + getData;
+        }
+        
 
         //This creates an accessable object from the json data
         const obj = JSON.parse(getData);
@@ -57,7 +73,7 @@
         //This accesses the html object named "list"
         let list = document.getElementById("myList");
 
-        for (i=0; i < obj.plants.length; ++i) {
+        for (i=1; i < obj.plants.length; ++i) {
             let li = document.createElement('li'); //creates a list element for each existing plant
             
             //concatinate each attribute of each plant object
@@ -119,7 +135,7 @@
 
         //I probably won't use this
         function clearStorage(){
-            //localStorage.clear("plants");
+            localStorage.clear("plants");
         }
         
         //A test to change the color of elements of the list when clicked on (unused)

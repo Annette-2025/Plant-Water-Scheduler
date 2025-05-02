@@ -13,7 +13,7 @@ class PlantWaterSchedulerTests(unittest.TestCase):
         # Start the Chrome browser
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        # Create screenshots folder if it doesn't exist
+
         if not os.path.exists('screenshots'):
             os.makedirs('screenshots')
 
@@ -81,6 +81,81 @@ class PlantWaterSchedulerTests(unittest.TestCase):
         table = driver.find_element(By.TAG_NAME, "table")
         self.assertTrue(table.is_displayed())
         print("Opened april.html and found table successfully!")
+
+    def test_boundary_name_field(self):
+        self.driver.get("http://localhost:1001/pages/plantList.html")
+        add_button = self.driver.find_element(By.ID, "add-plant-btn")
+        name_input = self.driver.find_element(By.ID, "plant-name")
+        year_input = self.driver.find_element(By.ID, "plant-year")
+        month_input = self.driver.find_element(By.ID, "plant-month")
+        day_input = self.driver.find_element(By.ID, "plant-day")
+
+        # Test empty name (should not add)
+        name_input.clear()
+        name_input.send_keys("")
+        year_input.clear()
+        year_input.send_keys("2025")
+        month_input.clear()
+        month_input.send_keys("1")
+        day_input.clear()
+        day_input.send_keys("1")
+        add_button.click()
+        time.sleep(1)
+        self.assertNotIn("<li></li>", self.driver.page_source)
+
+        # Test very long name (should accept)
+        long_name = "x" * 100
+        name_input.clear()
+        name_input.send_keys(long_name)
+        add_button.click()
+        time.sleep(1)
+        self.assertIn(long_name, self.driver.page_source)
+
+    def test_boundary_month_and_day_fields(self):
+        print("Boundary Test: Valid/Invalid Month & Day inputs checked!")
+        self.driver.get("http://localhost:1001/pages/plantList.html")
+        add_button = self.driver.find_element(By.ID, "add-plant-btn")
+        name_input = self.driver.find_element(By.ID, "plant-name")
+        year_input = self.driver.find_element(By.ID, "plant-year")
+        month_input = self.driver.find_element(By.ID, "plant-month")
+        day_input = self.driver.find_element(By.ID, "plant-day")
+
+        def try_add(name, year, month, day, should_appear):
+            self.driver.refresh()
+            time.sleep(1)
+            name_input = self.driver.find_element(By.ID, "plant-name")
+            year_input = self.driver.find_element(By.ID, "plant-year")
+            month_input = self.driver.find_element(By.ID, "plant-month")
+            day_input = self.driver.find_element(By.ID, "plant-day")
+            add_button = self.driver.find_element(By.ID, "add-plant-btn")
+
+            name_input.clear()
+            name_input.send_keys(name)
+            year_input.clear()
+            year_input.send_keys(str(year))
+            month_input.clear()
+            month_input.send_keys(str(month))
+            day_input.clear()
+            day_input.send_keys(str(day))
+            add_button.click()
+            time.sleep(1)
+
+            if should_appear:
+                self.assertIn(name, self.driver.page_source)
+            else:
+                self.assertNotIn(name, self.driver.page_source)
+
+        # Valid dates
+        try_add("lemon/janEnd", 2025, 1, 31, True)
+        try_add("cactus/FebEnd", 2025, 2, 28, True)
+        try_add("sunflower/AprEnd", 2025, 4, 30, True)
+
+        # Invalid dates
+        try_add("Feb29", 2025, 2, 29, False)
+        try_add("Apr31", 2025, 4, 31, False)
+        try_add("MonthZero", 2025, 0, 15, False)
+        try_add("Month13", 2025, 13, 15, False)
+
 
     @classmethod
     def tearDown(self):

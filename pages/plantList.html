@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<title>Plant Calendar</title>
     <style>
@@ -27,7 +26,6 @@
             cursor: pointer;
             
         }
-
         li:hover {
             background-color: #e0e0e0;
         }
@@ -72,7 +70,6 @@
 
     </style>
 </head>
-
 <body>
     <div class="sidenav">
         <table class="sidetable" align="center" cellspacing="0" cellpadding="0";>
@@ -178,61 +175,48 @@
     <script>
         
 
-        //This is the default data for the list, it is stored in a json-like format
-        //let data = '{ "plants" : [' +
-//'{ "name":"Ficus" , "year":"2025", "month":"1", "day":"1" },' +
-//'{ "name":"Lemon" , "year":"2025", "month":"1", "day":"2" },' +
-//'{ "name":"Snake Plant" , "year":"2025", "month":"1", "day":"3" } ]}';
-        let data = '{ "plants" : [' +
-'{ "name":" " , "year":" ", "month":" ", "day":" " } ]}';
-        //localStorage.clear("plants");
+    <button id="add-plant-btn" onclick="popup()">Add Plant</button><br><br>
+    <button onclick="clearStorage()">Clear All</button><br><br>
+    <a href="calendar.html">View Calendar</a><br>
 
-        //This sets the default data into the local storage, you will not be able to add
-        //more plants while this is uncommented, however you will have to uncomment it the first time you run
-        //the program, or else you will not be able to add any plants to the list. After running
-        //the program the first time, comment the code and everything should run normally, well mostly-
-        //- you still can't delete an item from the list.
-        //localStorage.setItem("plants", data); 
+    <ul id="myList"></ul>
 
-        //This retrieves data from local storage, it will stay on the server perminantly until deleted!
-        getData = localStorage.getItem("plants");
-        //document.getElementById("testScript").innerHTML = "data: " + getData;
-        if(getData == null){
+    <script>
+        let data = '{ "plants" : [] }';
+        let getData = localStorage.getItem("plants");
+        if (!getData) {
             localStorage.setItem("plants", data);
             getData = localStorage.getItem("plants");
             //document.getElementById("testScript").innerHTML = "It worked";
         }else{
             //document.getElementById("testScript").innerHTML = "For debugging: " + getData;
         }
-        
-
-        //This creates an accessable object from the json data
         const obj = JSON.parse(getData);
+        const list = document.getElementById("myList");
 
-        //This accesses the html object named "list"
-        let list = document.getElementById("myList");
-
-        for (i=1; i < obj.plants.length; ++i) {
-            let li = document.createElement('li'); //creates a list element for each existing plant
-            
-            //concatinate each attribute of each plant object
+        for (let i = 0; i < obj.plants.length; ++i) {
+            let li = document.createElement('li');
             let cat = obj.plants[i].name + ", " + obj.plants[i].month + "/" + obj.plants[i].day + "/" + obj.plants[i].year;
             li.innerText = cat;
-
-            //li.innerText = document.getElementById("myList").innerHTML = obj.plants[i].name
-            //+ " " + obj.plants[i].year + ": " + i;
-
-            list.appendChild(li); //appends the list element to the list
+            list.appendChild(li);
         }
-        
 
+        function popup() {
+            //load new data
+            const raw = localStorage.getItem("plants");
+            const obj = raw ? JSON.parse(raw) : { plants: [] };
 
-        
-        //for (i = 0; i < data.length; ++i) {
-            //let li = document.createElement('li');
-            //li.innerText = data[i];
-            //list.appendChild(li);
-        //}
+            let name1 = document.getElementById("plant-name").value.trim();
+            let year1 = document.getElementById("plant-year").value;
+            let month1 = document.getElementById("plant-month").value;
+            let day1 = document.getElementById("plant-day").value;
+
+            if (!name1 || parseInt(year1) != 2025 || month1 < 1 || month1 > 12) return;
+
+            let max = 31;
+            if (month1 == 2) max = 28;
+            else if ([4, 6, 9, 11].includes(parseInt(month1))) max = 30;
+            if (day1 < 1 || day1 > max) return;
 
         function getValue() {
             //make a localstorage object for warnings
@@ -308,17 +292,17 @@
             } while(day1 < 1 || day1 > max);
             
             newObject = { name: name1, year: year1, month: month1, day: day1 };
+
             obj.plants.push(newObject);
-            JSON_String = JSON.stringify(obj);
-            localStorage.setItem("plants", JSON_String);
-            cat1 = name1 + ", " + month1 + "/" + day1 + "/" + year1;
-            update(cat1);
+            localStorage.setItem("plants", JSON.stringify(obj));
+            update(name1 + ", " + month1 + "/" + day1 + "/" + year1);
         }
 */
         //This appends a new plant object to the list containing the information the user just input
+
         function update(text) {
             let li = document.createElement('li');
-            li.innerText = text
+            li.innerText = text;
             list.appendChild(li);
         }
 
@@ -415,7 +399,7 @@
         * https://www.geeksforgeeks.org/how-to-display-javascript-variable-value-in-alert-box/
         * https://www.w3schools.com/js/js_date_methods.asp
         */
+
     </script>
 </body>
-
 </html>

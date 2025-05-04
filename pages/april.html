@@ -2,30 +2,15 @@
 <html lang="en">
  
 <head>
-    <title>Plant Calendar</title>
     <meta charset="UTF-8">
     <style>
-        .sidetable {
-            border-collapse: collapse
-        }
-        .sidetable td {
-            font-weight: lighter;
-            border-bottom: solid;
-            border-top: none;
-            border-left: none;
-            border-right: none;
-            border-width: 2px;
-            border-color: grey;
-            width: 10%;
-            
-        }
-        .maintable {
+        table {
             border-collapse: collapse;
             background: white;
             color: rgb(4, 64, 99);
         }
          
-        .maintable th,
+        th,
         td {
             font-weight: bold;
             border-style: solid;
@@ -33,118 +18,10 @@
             border-color: rgb(4, 64, 99);
             width: 50px;
         }
-        .sidenav {
-            height: 100%; /* Full-height: remove this if you want "auto" height */
-            width: 10%; /* Set the width of the sidebar */
-            position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-            z-index: 1; /* Stay on top */
-            top: 0; /* Stay at the top */
-            left: 0;
-            background-color: #111; /* Black */
-            overflow-x: hidden; /* Disable horizontal scroll */
-            padding-top: 20px;
-        }
-        /* The navigation menu links */
-        .sidenav a {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
-            font-size: 22px;
-            color: #818181;
-            display: block;
-            text-align: center;
-        }
-
-        /* When you mouse over the navigation links, change their color */
-        .sidenav a:hover {
-            color: #f1f1f1;
-        }
-
-        /* Style page content */
-        .main {
-            margin-left: 160px; /* Same as the width of the sidebar */
-            padding: 0px 10px;
-        }
-
-        /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
-        @media screen and (max-height: 450px) {
-            .sidenav {padding-top: 15px;}
-            .sidenav a {font-size: 18px;}
-        }
     </style>
 </head>
  
 <body>
-    <div class="sidenav">
-        <table class="sidetable" align="center" cellspacing="0" cellpadding="0">
-            <tbody>
-                <tr>
-                    <td>
-                        <a href="plantList.html">Edit</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="calendar.html">Jan</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="february.html">Feb</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">Mar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="april.html">Apr</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="may.html">May</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">Jun</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">Jul</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">Aug</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">Sep</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">Oct</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">Nov</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">Dec</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
     <!-- Here we are using attributes like
         cellspacing and cellpadding -->
  
@@ -159,7 +36,7 @@
     </h2>
     <br />
  
-    <table class="maintable" bgcolor="lightgrey" align="center"
+    <table bgcolor="lightgrey" align="center"
         cellspacing="21" cellpadding="21">
  
         <!-- The tr tag is used to enter 
@@ -261,18 +138,17 @@
             </tr>
         </tbody>
     </table>
-    
+    <br />
+    <a href="calendar.html">January</a>
+    <br />
+    <a href="plantList.html">Home</a>
+    <br />
     <center>
-        <pre>
-            <h1 id="selected"><br /></h1>
-        </pre>
-    
         <h1>Plant List</h1>
-        
-        <ul id="myList"></ul>
-        <br />
-        <p id="demo2"></p>
     </center>
+    <ul id="myList"></ul>
+    <br />
+    <p id="demo2"></p>
     <script>
         const day_to_id_offset = 2;
         const calendar_month = 4;
@@ -372,38 +248,23 @@
             //element.style="background: white"
             //highlight_date();
         }
-        function popup(id) {    //replace with html popups
-            //var popup = document.getElementById("myPopup");//<----------------example
-           // popup.classList.toggle("show");//<--------------example
+        function popup(id) {
             var nameString = "";
-            var y;
-            var popup = document.getElementById("selected");   //css popup only
             const element = document.getElementById(id);
             const cssObj = window.getComputedStyle(element, null);
             let bgColor = cssObj.getPropertyValue("background-color");
             if(cssObj.getPropertyValue("background-color") == "rgb(47, 228, 219)"){
                 for(i=0; i < obj.plants.length; ++i){
                     var x = obj.plants[i].day;
-                    y = Number(x);
+                    var y = Number(x);
                     y = y + day_to_id_offset;
                     if(obj.plants[i].month == calendar_month && id == y){
-                        if(nameString.length == 0){
-                            nameString += "April " + x + ":\n" + obj.plants[i].name;
-                        }else{
-                            nameString = nameString + '\n' + obj.plants[i].name;
-                        }
-                        
+                        nameString = nameString + "\n" + obj.plants[i].name;
                     }
                 }
                 //var nameString = obj.plants[1].name;
-                //alert("data");    //regular alert only
-                //alert(nameString);    //regular alert only
-                //return(nameString); //onclick=alert only
-                //document.getElementById("popuptext") = "hello"; //css popup only
-                //monthString = "January " + y;
-                //document.getElementById("selected_day").innerHTML = monthString;
-                popup.textContent = nameString;   //css popup only
-                popup.classList.toggle("show");   //css popup only
+                //alert("data");
+                alert(nameString);
             }else{
                 //alert("hello world!");
             }

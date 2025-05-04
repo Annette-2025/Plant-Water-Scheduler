@@ -1,32 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Plant List</title>
+	<title>Plant Calendar</title>
     <style>
+        .sidetable {
+            border-collapse: collapse
+        }
+        .sidetable td {
+            border-bottom: solid;
+            border-width: 2px;
+            border-color: grey;
+            width: 10%;
+            
+        }
         #myList {
             list-style-type: none;
             padding: 0;
         }
         li {
+            width: 50%;
             margin-bottom: 5px;
             padding: 5px 10px;
             background-color: #f0f0f0;
             border-radius: 5px;
             cursor: pointer;
+            
         }
         li:hover {
             background-color: #e0e0e0;
         }
+
+        .sidenav {
+            height: 100%; /* Full-height: remove this if you want "auto" height */
+            width: 10%; /* Set the width of the sidebar */
+            position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+            z-index: 1; /* Stay on top */
+            top: 0; /* Stay at the top */
+            left: 0;
+            background-color: #111; /* Black */
+            overflow-x: hidden; /* Disable horizontal scroll */
+            padding-top: 20px;
+        }
+        /* The navigation menu links */
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 22px;
+            color: #818181;
+            display: block;
+            text-align: center;
+        }
+
+        /* When you mouse over the navigation links, change their color */
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        /* Style page content */
+        .main {
+            margin-left: 160px; /* Same as the width of the sidebar */
+            padding: 0px 10px;
+        }
+
+        /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+            .sidenav {padding-top: 15px;}
+            .sidenav a {font-size: 18px;}
+        }
+
     </style>
 </head>
 <body>
-    <center><h1>Plant List</h1></center>
-
-    <!-- 🌱 Input form -->
-    <label>Plant Name: <input type="text" id="plant-name"></label><br>
-    <label>Year: <input type="number" id="plant-year" min="2025" max="2025"></label><br>
-    <label>Month: <input type="number" id="plant-month" min="1" max="12"></label><br>
-    <label>Day: <input type="number" id="plant-day" min="1" max="31"></label><br><br>
+    <div class="sidenav">
+        <table class="sidetable" align="center" cellspacing="0" cellpadding="0";>
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="plantList.html">Edit</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="calendar.html">Jan</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="february.html">Feb</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#">Mar</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="april.html">Apr</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="may.html">May</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#">Jun</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#">Jul</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#">Aug</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#">Sep</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#">Oct</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#">Nov</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#">Dec</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <center>
+        <h1>Plant List</h1>
+    <form>
+        <ul id="myList" onclick="blue(id, style.color)"></ul>
+        <!--<button type="button" onclick="popup()">Add Another</button>
+        <br /><br />-->
+        <button type="submit" onclick="clearStorage()">Clear All</button>
+    </form>
+        
+    </center>
+    <form method="POST" >
+        <center>
+            <h3>Add New Plant</h3>
+            <label>name</label><br />
+            <input type="text" id="Name"></form><br /><br />
+            <label>year</label><br />
+            <input type="number" id="Year" min="2025" max="2025"></form><br /><br />
+            <label>month</label><br />
+            <input type="number" id="Month" min="1" max="12"></form><br /><br />
+            <label>day</label><br />
+            <input type="number" id="Day" min="1" max="31"></form><br /><br />
+            <button type="submit" id="submit1" onclick="getValue()">Add Plant</button><br />
+            <p id="warning"><br /></p>
+        </center>
+    </form>
+    <br /><br />
+    <br />
+    <p id="testScript"></p>
+    <br />
+    <p id="test2"></p>
+    <script>
+        
 
     <button id="add-plant-btn" onclick="popup()">Add Plant</button><br><br>
     <button onclick="clearStorage()">Clear All</button><br><br>
@@ -40,6 +187,9 @@
         if (!getData) {
             localStorage.setItem("plants", data);
             getData = localStorage.getItem("plants");
+            //document.getElementById("testScript").innerHTML = "It worked";
+        }else{
+            //document.getElementById("testScript").innerHTML = "For debugging: " + getData;
         }
         const obj = JSON.parse(getData);
         const list = document.getElementById("myList");
@@ -68,11 +218,87 @@
             else if ([4, 6, 9, 11].includes(parseInt(month1))) max = 30;
             if (day1 < 1 || day1 > max) return;
 
-            const newObject = { name: name1, year: year1, month: month1, day: day1 };
+        function getValue() {
+            //make a localstorage object for warnings
+            //also, If I delete a plant it goes by name only, and it will delete all plants with the same name
+            //warning = document.getElementById("warning"); // TODO: the warning will not appear because the button reloads to page, it will have to be saved in localStorage
+            let inputName = document.getElementById("Name");
+            let inputYear = document.getElementById("Year");
+            let inputMonth = document.getElementById("Month");
+            let inputDay = document.getElementById("Day");
+            let name = inputName.value.trim();
+            let year = inputYear.value;
+            let month = inputMonth.value;
+            let day = inputDay.value;
+            if (name == "" || year == "" || month == "" || day == ""){
+                //warning.innerHTML = "At least one field is missing, please enter your information again"
+                return;
+            }
+            if (year != 2025){
+                //warning.innerHTML = "Year must be 2025 for now"
+                return;
+            }
+            if (month < 1 || month > 12){
+                //warning.innerHTML = "month must be between 1 and 12"
+                return;
+            }
+            if (day < 0){
+                //warning.innerHTML = "please enter a number of at least 1"
+                return;
+            }
+            if (month == 2 && day > 28){
+                //warning.innerHTML = "please enter a value of 28 or less for that month"
+                return;
+            }
+            if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30){
+                //warning.innerHTML = "please enter a value of 30 or less for that month"
+                return;
+            }
+            if ((month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) && day > 31){
+                //warning.innerHTML = "please enter a value of 31 or less for that month"
+                return;
+            }
+
+            newObject = { name: name, year: year, month: month, day: day };
+            obj.plants.push(newObject);
+            JSON_String = JSON.stringify(obj);
+            localStorage.setItem("plants", JSON_String);
+            cat1 = name1 + ", " + month + "/" + day + "/" + year;
+            update(cat1);
+        }
+
+        //This function creates a series of popups to save information on a new plant object
+  /*      
+        function popup() {
+            //alert("hello world!");
+            name1 = window.prompt("Enter a plant name:", "type here");
+            if (name1 == null || name1 == ""){return;}
+            do {
+                year1 = window.prompt("Enter year:", "type here");
+                if (year1 == null || year1 == ""){return;}
+            } while(year1 != 2025);
+            do {
+                month1 = window.prompt("Enter month:", "type here");
+                if (month1 == null || month1 == ""){return;}
+            } while(month1 < 1 || month1 > 12);
+            do {
+                max = 31;
+                day1 = window.prompt("Enter day:", "type here");
+                if (day1 == null || day1 == ""){return;}
+                if (month1 == 2){max = 28;}
+                    else if (month1 == 4 || month1 == 6 || month1 == 9 || month1 == 11){max = 30;}
+                        else {max = 31;}
+                //if (month == 1 || month == 3 || month == 5 || month == 7 || month == )
+            } while(day1 < 1 || day1 > max);
+            
+            newObject = { name: name1, year: year1, month: month1, day: day1 };
+
             obj.plants.push(newObject);
             localStorage.setItem("plants", JSON.stringify(obj));
             update(name1 + ", " + month1 + "/" + day1 + "/" + year1);
         }
+*/
+        //This appends a new plant object to the list containing the information the user just input
 
         function update(text) {
             let li = document.createElement('li');
@@ -80,10 +306,100 @@
             list.appendChild(li);
         }
 
-        function clearStorage() {
-            localStorage.removeItem("plants");
-            location.reload();
+        //I probably won't use this
+        function clearStorage(){
+            localStorage.clear("plants");
         }
+
+        //removes an element from the list, but not from the local storage of the server
+        function removeValue(target) {
+            if (target.tagName === 'LI') {
+                const search = target.innerText;
+                const text = search.split(",");
+                const date = text[1].split("/");
+                const name = text[0];
+                const day = date[0]
+                const month = date[1]
+                const year = date[2]
+                //alert(date[0])
+                getData = localStorage.getItem("plants");
+                const obj = JSON.parse(getData);
+                
+                for (i=1; i < obj.plants.length; ++i){
+                    //alert(obj)
+                    
+                    //alert(obj.plants[i].name + ", " + name)
+                    if (obj.plants[i].name == name || (obj.plants[i].year == year && obj.plants.month == month && obj.plants.day == day)){
+                        //alert("t2")
+                        //obj.plants.pop(1)
+                        //delete obj.plants[i];
+                        //obj.splice(i, 1);
+                        //obj.splice(obj.plants[i], 1);
+                        //alert(obj.plants[i].name + ", " + name)
+                        
+                        let res = obj.plants.filter(obj => obj.name !== name);
+                        //let res = res1.filter(obj => obj.name !== "undefined")
+                        //alert(obj.plants)
+                        //const r = JSON.parse(res)
+                        //alert(r)
+                        //----//obj.plants.pop()
+                        
+                        //obj.plants.pop()
+                        //alert("obj length:" + obj.plants.length)
+                        //for (j=1; j < obj.plants.length; j++){
+                            //alert("popped")
+                            //obj.plants.pop()
+                            
+                        //}
+                        localStorage.setItem("plants", data);
+                        getData = localStorage.getItem("plants");
+                        const newObj = JSON.parse(getData);
+                        //obj.plants.push(r)
+                        for (j=1; j < res.length; j++){
+                            if (res[j].name != "undefined"){
+                                newObj.plants.push(res[j])
+                            }
+
+                        }
+                        
+                        //obj.plants.shift()
+                        //alert(obj.plants[1].name)
+                        //alert("RES:\n" + res)
+                        //alert(res.length)
+                        target.remove();
+                        
+                        JSON_String = JSON.stringify(newObj);
+                        //alert(JSON_String)
+                        localStorage.setItem("plants", JSON_String);
+                        return;
+                    }
+                }
+                
+                
+                alert(target.innerText)
+            }
+        }
+
+        //As an event listener, it waits around until a specific event happens, then executes a command.
+        //In this case a click will trigger the remove value function.
+        document.getElementById(    //this doesn't actually remove the value, it only looks like it has been removed.
+              'myList').addEventListener(
+              'click', function (event) {
+            removeValue(event.target);
+        });
+        /*
+        * BRIGHT IDEAS HERE:
+        * perhaps I should make the year, month, and day an object withing the plants object,
+        so that each plant can have an infinite ammount of dates
+        * Links:
+        * https://www.w3schools.com/jsref/event_onclick.asp
+        * https://www.w3schools.com/jS/js_popup.asp
+        * https://www.geeksforgeeks.org/how-to-add-remove-value-onclick-event-in-html/
+        * https://www.w3schools.com/Html/html_attributes.asp
+        * https://www.geeksforgeeks.org/how-to-display-javascript-variable-value-in-alert-box/
+        * https://www.w3schools.com/js/js_date_methods.asp
+        */
+
     </script>
 </body>
 </html>

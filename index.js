@@ -1,6 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
+const port = 1001
 
 http.createServer((req, res)=>{
     var q = url.parse(req.url,true);
@@ -17,8 +18,8 @@ http.createServer((req, res)=>{
     //res.writeHead(200,{'Content-Type': 'text/html'});
     //var readStream = fs.createReadStream('public/plantList.html');
     //readStream.pipe(res);
-}).listen(1001);
-console.log("server running on port 1001");
+}).listen(port);
+console.log("server running on port " + port + "\nAccess Webpage here: " + "http://localhost:" + port + "/pages/calendar.html");
 
 
 

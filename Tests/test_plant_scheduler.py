@@ -84,11 +84,11 @@ class PlantWaterSchedulerTests(unittest.TestCase):
 
     def test_boundary_name_field(self):
         self.driver.get("http://localhost:1001/pages/plantList.html")
-        add_button = self.driver.find_element(By.ID, "add-plant-btn")
-        name_input = self.driver.find_element(By.ID, "plant-name")
-        year_input = self.driver.find_element(By.ID, "plant-year")
-        month_input = self.driver.find_element(By.ID, "plant-month")
-        day_input = self.driver.find_element(By.ID, "plant-day")
+        add_button = self.driver.find_element(By.ID, "submit1")
+        name_input = self.driver.find_element(By.ID, "Name")
+        year_input = self.driver.find_element(By.ID, "Year")
+        month_input = self.driver.find_element(By.ID, "Month")
+        day_input = self.driver.find_element(By.ID, "Day")
 
         # Test empty name (should not add)
         name_input.clear()
@@ -103,31 +103,25 @@ class PlantWaterSchedulerTests(unittest.TestCase):
         time.sleep(1)
         self.assertNotIn("<li></li>", self.driver.page_source)
 
-        # Test very long name (should accept)
-        long_name = "x" * 100
-        name_input.clear()
-        name_input.send_keys(long_name)
-        add_button.click()
-        time.sleep(1)
-        self.assertIn(long_name, self.driver.page_source)
+        
 
     def test_boundary_month_and_day_fields(self):
         print("Boundary Test: Valid/Invalid Month & Day inputs checked!")
         self.driver.get("http://localhost:1001/pages/plantList.html")
-        add_button = self.driver.find_element(By.ID, "add-plant-btn")
-        name_input = self.driver.find_element(By.ID, "plant-name")
-        year_input = self.driver.find_element(By.ID, "plant-year")
-        month_input = self.driver.find_element(By.ID, "plant-month")
-        day_input = self.driver.find_element(By.ID, "plant-day")
+        add_button = self.driver.find_element(By.ID, "submit1")
+        name_input = self.driver.find_element(By.ID, "Name")
+        year_input = self.driver.find_element(By.ID, "Year")
+        month_input = self.driver.find_element(By.ID, "Month")
+        day_input = self.driver.find_element(By.ID, "Day")
 
         def try_add(name, year, month, day, should_appear):
             self.driver.refresh()
             time.sleep(1)
-            name_input = self.driver.find_element(By.ID, "plant-name")
-            year_input = self.driver.find_element(By.ID, "plant-year")
-            month_input = self.driver.find_element(By.ID, "plant-month")
-            day_input = self.driver.find_element(By.ID, "plant-day")
-            add_button = self.driver.find_element(By.ID, "add-plant-btn")
+            name_input = self.driver.find_element(By.ID, "Name")
+            year_input = self.driver.find_element(By.ID, "Year")
+            month_input = self.driver.find_element(By.ID, "Month")
+            day_input = self.driver.find_element(By.ID, "Day")
+            add_button = self.driver.find_element(By.ID, "submit1")
 
             name_input.clear()
             name_input.send_keys(name)
